@@ -48,6 +48,13 @@
     print("Hello world!<br/>");
     echo($saludo);
 
+    echo "<br/>";
+
+    //Constantes
+    const PI = 3.1416, HOST = "localhost";
+
+    echo("El valor de HOST es: " . HOST);
+
     ?>
 
     <script>
