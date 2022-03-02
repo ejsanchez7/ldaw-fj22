@@ -3,7 +3,7 @@
 $students = [
     "A00123456" => [
         "name" => "Pedro",
-        "lastname" => "López",
+        "lastname" => "Hernández",
         "career" => "IMT",
         "active" => true,
         "grades" => [60,50,85]
@@ -23,6 +23,11 @@ $students = [
         "grades" => []
     ]
 ];
+
+
+function average($values){
+    return !empty($values) ? array_sum($values)/count($values) : "Sin datos";
+}
 
 ?>
 
@@ -47,9 +52,34 @@ $students = [
 <body>
 
     <main class="container">
-
+        
         <ul class="list-group mt-5">
-            <li class="list-group-item">
+
+            <?php 
+            foreach($students as $id => $student){ 
+                
+                $name = implode(" ", [$student["name"], $student["lastname"]]);
+                $career = $student["career"];
+                $avg = average($student["grades"]);
+                $gradeClass = ($avg < 70) ? "text-danger" : "";
+                $liDisabledClass = !$student["active"] ? "disabled" : "";
+            ?>
+
+                <li class="list-group-item <?php echo($liDisabledClass); ?>">
+                    <p class="mb-1">
+                        <strong>
+                            <?php echo("$id - $career $name"); ?>
+                        </strong>
+                    </p>
+                    <p class="my-1">
+                        <strong>Promedio: </strong>
+                        <span class="<?php echo($gradeClass) ?>"><?php echo($avg); ?></span>
+                    </p>
+                </li>
+
+            <?php } ?>
+
+            <!-- <li class="list-group-item">
                 <p class="mb-1">
                     <strong>A00123456 - IMT Pedro López</strong>
                 </p>
@@ -75,8 +105,9 @@ $students = [
                     <strong>Promedio: </strong>
                     <span>Sin datos</span>
                 </p>
-            </li>
+            </li> -->
         </ul>
+        
 
     </main>
     
