@@ -12,7 +12,8 @@ const BOOKS = [
         "edition" => "100a",
         "language" => "Español",
         "price" => 150.00,
-        "categories" => ["Novela", "Drama", "Clásicos"]
+        "categories" => ["Novela", "Drama", "Clásicos"],
+        "cover" => "9786071436252.jpg"
     ],
     "9786077362197" => [
         "title" => "La Letra Escarlata",
@@ -23,6 +24,19 @@ const BOOKS = [
         "edition" => "2a",
         "language" => "Español",
         "price" => 191.00,
-        "categories" => ["Novela", "Suspenso"]
+        "categories" => ["Novela", "Suspenso"],
+        "cover" => "letra_escarlata.png"
+    ],
+    "9786070726873" => [
+        "title" => "El Perfume",
+        "summary" => 'Jean-Baptiste Grenouille es, gracias a su prodigioso sentido del olfato, el mejor elaborador de perfumes de todos los tiempos. Pero es un ser grotesco, deforme y repulsivo a los ojos de las mujeres. Como venganza a tanta ofensa sufrida a causa de su aspecto físico, elabora un raro perfume que subyuga la voluntad de quien lo huele.',
+        "authors" => ["Patrick Süskind"],
+        "publisher" => "Booket México",
+        "year" => 2015,
+        "edition" => "1a",
+        "language" => "Español",
+        "price" => 228.00,
+        "categories" => ["Novela", "Suspenso"],
+        "cover" => "perfume.jpg"
     ],
 ];
