@@ -14,14 +14,11 @@
         ***********************************
         -->
            
-        <!--Bootstrap-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-        
+        <!-- Partial con los estilos generales -->
+        <?php require_once(dirname(__FILE__) . "/partials/styles.php"); ?>
+
         <!-- Multiselect -->
         <link rel="stylesheet" href="./js/multiselect/css/multi-select.css" />
-
-        <!--Main CSS-->
-        <link rel="stylesheet" href="./css/main.css" />
 
         <!-- Page CSS -->
         <link rel="stylesheet" href="./css/newBook.css" />
@@ -30,76 +27,11 @@
 
     <body>
 
-        <header class="container-fluid">
-            <h1>Laboratorio de Desarrollo de Aplicaciones Web</h1>
-        </header>
+        <!-- Partial del header -->
+        <?php require_once(dirname(__FILE__) . "/partials/header.php"); ?>
 
-        <!-- Navegación principal -->
-        <nav class="container-fluid navbar navbar-expand-md navbar-light position-sticky top-0">
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <a class="navbar-brand d-md-none" href="#">Menu</a>
-        
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        
-                <ul class="navbar-nav w-100 justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link py-3 px-4" href="./index.html">Catálogo</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a 
-                            class="nav-link dropdown-toggle py-3 px-4 active" 
-                            id="booksDropdown" 
-                            href="#" 
-                            role="button"
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false"
-                        >
-                            Libros
-                        </a>
-
-                        <ul class="dropdown-menu m-0 border-0" aria-labelledby="booksDropdown">
-                            <li>
-                                <a class="dropdown-item text-center text-md-start active" href="./newBook.html">
-                                    Nuevo
-                                </a>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a 
-                            class="nav-link dropdown-toggle py-3 px-4" 
-                            href="#"
-                            id="authorsDropdown" 
-                            href="#" 
-                            role="button"
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false"
-                        >
-                            Autores
-                        </a>
-
-                        <ul class="dropdown-menu m-0 border-0" aria-labelledby="authorsDropdown">
-                            <li>
-                                <a class="dropdown-item text-center text-md-start" href="./authors.html">
-                                    Listado
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-center text-md-start" href="./newAuthor.html">Nuevo</a>
-                            </li>
-                        </ul>
-
-                    </li>
-                </ul>
-        
-            </div>
-        
-        </nav>
+        <!-- Partial de navegación principal -->
+        <?php require_once(dirname(__FILE__) . "/partials/main_nav.php"); ?>
 
         <!-- Contenido principal -->
         <main class="container-fluid py-5 mb-5">
@@ -201,12 +133,8 @@
 
         </main>
 
-        <!-- Footer -->
-        <footer class="container-fluid position-fixed bottom-0">
-
-            <p class="m-0">Erik Sánchez - LDAW Febrero - Junio 2022</p>
-        
-        </footer>
+        <!-- Partial del footer -->
+        <?php require_once(dirname(__FILE__) . "/partials/footer.php"); ?>
         
     </body>
 
@@ -216,10 +144,9 @@
     *******************************
     -->
 
-    <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <!-- Partial con los scripts generales -->
+    <?php require_once(dirname(__FILE__) . "/partials/scripts.php"); ?>
+
     <!-- Multiselect -->
     <script src="./js/multiselect/js/jquery.multi-select.js"></script>
 
