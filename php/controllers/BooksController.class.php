@@ -3,11 +3,12 @@
 //Definición de namespace para evitar la colisión de nombres
 namespace controllers;
 
-//Importar archivo de datos
-require_once(dirname(__FILE__) . "/../data/data.php");
+//Importar el modelo
+require_once(dirname(__FILE__) . "/../models/Book.class.php");
 
-//Extraer la constante del namespace y asignarle un alias
-use const AppData\BOOKS as BOOKS;
+//Extraer la clase Book
+use models\Book as Book;
+
 
 //Definición de la clase
 class BooksController{
@@ -21,8 +22,10 @@ class BooksController{
     //Método de la clase para manejar la vista "index"
     public function index(){
 
+        $books = Book::getBooks();
+
         return [
-            "books" => BOOKS,
+            "books" => $books,
             "pageName" => "index"
         ];
 

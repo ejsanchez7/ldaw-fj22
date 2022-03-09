@@ -67,21 +67,21 @@ extract($controller->index());
                     <div class="card mx-3 border-0 text-center my-3">
 
                         <div class="card-header">
-                            <?php echo($book["authors"][0]); ?>
+                            <?php echo($book->authors[0]); ?>
                         </div>
 
                         <img 
-                            src="./img/books_covers/<?php echo($book["cover"]); ?>" 
+                            src="./img/books_covers/<?php echo($book->cover); ?>" 
                             class="card-img-top mt-2" 
-                            alt="<?php echo($book["title"]); ?>"
+                            alt="<?php echo($book->title); ?>"
                         />
 
                         <div class="card-body">
                             <h5 class="card-title">
-                                <?php echo($book["title"]); ?>
+                                <?php echo($book->title); ?>
                             </h5>
                             <p class="card-text">
-                                $<?php echo($book["price"]); ?>
+                                $<?php echo($book->price); ?>
                             </p>
                         </div>
 
