@@ -37,7 +37,21 @@ class Book{
     public $cover;
 
     //Constructor (por omisión)
-    public function __construct(){}
+    public function __construct($array){
+        //Setear sus valores
+        //$this->id = $array["id"];
+        $this->isbn = $array["isbn"];
+        $this->title = $array["title"];
+        $this->summary = $array["summary"];;
+        $this->authors = $array["authors"];
+        $this->publisher = $array["publisher"];
+        $this->year = $array["year"];
+        $this->edition = $array["edition"];
+        $this->language = $array["language"];
+        $this->price = $array["price"];
+        $this->categories = $array["categories"];
+        $this->cover = $array["cover"];
+    }
 
     /****************************
         Métodos de instancia
@@ -59,22 +73,10 @@ class Book{
 
         foreach(BOOKS as $isbn => $book){
 
-            //Crear una instancia de Book
-            $bookObj = new Book();
-            //Setear sus valores
-            $bookObj->isbn = $isbn;
-            $bookObj->title = $book["title"];
-            $bookObj->summary = $book["summary"];
-            $bookObj->authors = $book["authors"];
-            $bookObj->publisher = $book["publisher"];
-            $bookObj->year = $book["year"];
-            $bookObj->edition = $book["edition"];
-            $bookObj->language = $book["language"];
-            $bookObj->price = $book["price"];
-            $bookObj->categories = $book["categories"];
-            $bookObj->cover = $book["cover"];
+            $book["isbn"] = $isbn;
 
-            $bookList[] = $bookObj;
+            //Crear una instancia de Book
+            $bookList[] = new Book($book);
         }
 
         return $bookList;
