@@ -67,7 +67,7 @@ extract($controller->index());
                     <div class="card mx-3 border-0 text-center my-3">
 
                         <div class="card-header">
-                            <?php echo($book->authors[0]); ?>
+                            <?php echo($book->authors[0]->getFullName()); ?>
                         </div>
 
                         <img 
@@ -87,7 +87,7 @@ extract($controller->index());
 
                         <div class="card-footer">
                             <a 
-                                href="./book.php?isbn=<?php echo($isbn); ?>" 
+                                href="./book.php?isbn=<?php echo($book->isbn); ?>" 
                                 class="btn btn-primary"
                             >
                                 Detalle

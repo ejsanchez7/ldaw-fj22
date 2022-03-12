@@ -18,13 +18,17 @@ class Author{
         $this->id = $array["id"];
         $this->firstName = $array["first_name"];
         $this->lastName = $array["last_name"];
-        $this->country = $array["country"];
+        $this->country = $array["country_id"];
 
     }
 
     /****************************
         Métodos de instancia
     *****************************/
+
+    public function getFullName(){
+        return $this->lastName . ", " . $this->firstName;
+    }
 
 
     /***************************
