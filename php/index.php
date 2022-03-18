@@ -62,7 +62,7 @@ extract($controller->index());
 
             <div class="card-group justify-content-center books-container">
 
-                <?php foreach($books as $isbn => $book){ ?>
+                <?php foreach($books as $book){ ?>
 
                     <div class="card mx-3 border-0 text-center my-3">
 
@@ -71,7 +71,7 @@ extract($controller->index());
                         </div>
 
                         <img 
-                            src="./img/books_covers/<?php echo($book->cover); ?>" 
+                            src="<?php echo($book->getCoverPath()); ?>" 
                             class="card-img-top mt-2" 
                             alt="<?php echo($book->title); ?>"
                         />
@@ -87,7 +87,7 @@ extract($controller->index());
 
                         <div class="card-footer">
                             <a 
-                                href="./book.php?isbn=<?php echo($book->isbn); ?>" 
+                                href="./book.php?id=<?php echo($book->id); ?>" 
                                 class="btn btn-primary"
                             >
                                 Detalle

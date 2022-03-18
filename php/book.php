@@ -1,3 +1,29 @@
+<?php
+//Importar la clase del controller
+require_once(dirname(__FILE__) . "/controllers/BooksController.class.php");
+//Extraer la clase de su namespace y asignarle un alias
+use controllers\BooksController as BooksController;
+
+//Crear una instancia del controller
+$controller = new BooksController();
+
+/*
+Ejecutar el método del controller que manejará a esta vista
+El método devuelve un arreglo asociativo con los datos que utilizará la vista
+
+La función "extract" extrae los datos del arreglo y los transforma en variables
+los nombres de las variables serán los mismos que las llaves del arreglo y 
+almacenarán los valores correspondientes.
+
+Por ejemplo:
+
+["name" => "Roberto", "lastname" => "Hernández"] se transformará en las variables:
+$name = "Roberto" y $lastname = "Hernández"
+*/
+extract($controller->book());//Devuelve la información particular $book
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,55 +59,64 @@
         <!-- Contenido principal -->
         <main class="container-fluid py-5 mb-5">
 
-           <h2 class="mb-5">El Conde de Montecristo</h2>
+           <h2 class="mb-5"><?php echo($book->title); ?></h2>
 
            <div class="row mt-4">
                
             <div class="col-4 text-center">
                    <img 
-                        src="./img/books_covers/conde_montecristo.jpg" 
+                        src="<?php echo($book->getCoverPath()); ?>" 
                         alt="El Conde de Montecristo"
                         class="book-cover"
                     />
 
-                    <h3 class="rounded-pill text-center py-3 mx-4 mt-4 price">$150.00</h3>
+                    <h3 class="rounded-pill text-center py-3 mx-4 mt-4 price">
+                        $<?php echo($book->price) ?>
+                    </h3>
 
             </div>
 
             <div class="col">
 
-                <p>
-                    Una Novela Publicada tan solo veintitrés años después de la muerte de Napoleón y 
-                    que es un éxito hasta nuestros días. ¿Quién mas podría levantarse de sus cenizas 
-                    como lo hizo Edmundo Dantés, cuya misión es recuperar todo lo que le fue robado: 
-                    Su prometida, su posición y su Honor?
-                </p>
+                <p><?php echo($book->summary) ?></p>
 
                 <ul class="list-group list-group-flush details-list rounded-3 mt-4">
                     <li class="list-group-item">
-                        <strong class="me-2">ISBN:</strong><span>9786071436252</span>
+                        <strong class="me-2">ISBN:</strong>
+                        <span><?php echo($book->isbn) ?></span>
                     </li>
                     <li class="list-group-item">
-                        <strong class="me-2">Autor(es):</strong><span>Alejandro Dumas</span>
+                        <strong class="me-2">Autor(es):</strong>
+                        <span><?php echo($book->getAuthorsNames()); ?></span>
                     </li>
                     <li class="list-group-item">
-                        <strong class="me-2">Editorial:</strong><span>Editores Mexicanos Unidos</span>
+                        <strong class="me-2">Editorial:</strong>
+                        <span><?php echo($book->publisher["name"]) ?></span>
                     </li>
                     <li class="list-group-item">
-                        <strong class="me-2">Año:</strong><span>2021</span>
+                        <strong class="me-2">Año:</strong>
+                        <span><?php echo($book->year) ?></span>
                     </li>
                     <li class="list-group-item">
-                        <strong class="me-2">Edición:</strong><span>100a edición</span>
+                        <strong class="me-2">Edición:</strong>
+                        <span><?php echo($book->edition) ?> edición</span>
                     </li>
                     <li class="list-group-item">
-                        <strong class="me-2">Idioma:</strong><span>Español</span>
+                        <strong class="me-2">Idioma:</strong>
+                        <span><?php echo($book->language["name"]) ?></span>
                     </li>
                 </ul>
 
                 <div class="keywords mt-5">
-                    <span class="badge rounded-pill px-3 py-2 me-2">Novela</span>
-                    <span class="badge rounded-pill px-3 py-2 me-2">Drama</span>
-                    <span class="badge rounded-pill px-3 py-2 me-2">Clásicos</span>
+
+                    <?php foreach($book->categories as $category){ ?>
+
+                        <span class="badge rounded-pill px-3 py-2 me-2">
+                            <?php echo($category["name"]); ?>
+                        </span>
+
+                    <?php } ?>
+
                 </div>
 
             </div>

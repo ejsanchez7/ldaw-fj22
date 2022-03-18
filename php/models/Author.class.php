@@ -11,7 +11,7 @@ class Author{
     public $lastName;
     public $country;
     
-    //Constructor
+    //Constructor: recibe un arreglo con los datos del autor y lo mapea a los atributos de la clase
     public function __construct($array){
             
         //Setear sus valores
@@ -26,8 +26,9 @@ class Author{
         Métodos de instancia
     *****************************/
 
+    //Devuelve el nombre completo del autor instanciado
     public function getFullName(){
-        return $this->lastName . ", " . $this->firstName;
+        return $this->firstName . " " . $this->lastName;
     }
 
 

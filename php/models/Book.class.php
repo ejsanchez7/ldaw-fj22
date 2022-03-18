@@ -42,7 +42,7 @@ class Book{
     public $cover;
 
 
-    //Constructor (por omisión)
+    //Constructor: toma un arreglo asociativo con los datos del libro y lo mapea a un objeto
     public function __construct($array){
         //Setear sus valores
         $this->id = $array["id"];
@@ -63,6 +63,7 @@ class Book{
         Métodos de instancia
     *****************************/
 
+    //Obtiene los autores asociados al libro y devuelve una lista de objetos "Author"
     private function getAuthors(){
 
         $query = "SELECT a.*
@@ -84,6 +85,8 @@ class Book{
 
     }
 
+    //Obtiene las categorías asociadas al libro y devuelve una lista de arreglos asociativos
+    //donde cada uno de ellos representa a una categoría
     private function getCategories(){
 
         $query = "SELECT c.*
@@ -97,6 +100,7 @@ class Book{
 
     }
 
+    //Obtiene los datos de la editorial del libro como un arreglo asociativo
     private function getPublisher($id){
 
         $query = "SELECT * FROM publishers WHERE id = ?";
@@ -105,6 +109,7 @@ class Book{
 
     }
 
+    //Obtiene los datos del idioma del libro como un arreglo asociativo
     private function getLanguage($id){
 
         $query = "SELECT * FROM languages WHERE id = ?";
@@ -113,8 +118,23 @@ class Book{
 
     }
 
+    //Devuelve una lista separada por comas con los nombres completos de los autores del libro
     public function getAuthorsNames(){
-        return implode(", ", $this->authors);
+        
+        $names = [];
+
+        foreach($this->authors as $author){
+
+            $names[] = $author->getFullName();
+
+        }
+
+        return implode(", ", $names);
+    }
+
+    //Devuelve la URL completa de la imagen de la portada del libro
+    public function getCoverPath(){
+        return "./img/books_covers/" . $this->cover;
     }
 
 
@@ -140,6 +160,15 @@ class Book{
         // echo "</pre>";
 
         return $bookList;
+
+    }
+
+    //Busca un libro por su ID y devuelve una instancia Book
+    public static function find($id){
+
+        $result = DB::getInstance()->query("SELECT * FROM books WHERE id=?", [$id]);
+
+        return new Book($result[0]);
 
     }
 
