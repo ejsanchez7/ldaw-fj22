@@ -172,6 +172,17 @@ class Book{
 
     }
 
+    public static function save($data){
+
+        $result = DB::getInstance()->insert(
+            "INSERT INTO books values(?,?,?,?,?,?,?,?,?)",
+            [
+                $data["isbn"]//...
+            ]
+        );
+
+    }
+
 }
 
 

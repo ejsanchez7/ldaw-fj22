@@ -1,3 +1,30 @@
+<?php 
+
+//Importar la clase del controller
+require_once(dirname(__FILE__) . "/controllers/BooksController.class.php");
+//Extraer la clase de su namespace y asignarle un alias
+use controllers\BooksController as BooksController;
+
+//Crear una instancia del controller
+$controller = new BooksController();
+
+/*
+Ejecutar el método del controller que manejará a esta vista
+El método devuelve un arreglo asociativo con los datos que utilizará la vista
+
+La función "extract" extrae los datos del arreglo y los transforma en variables
+los nombres de las variables serán los mismos que las llaves del arreglo y 
+almacenarán los valores correspondientes.
+
+Por ejemplo:
+
+["languages" => "Roberto", "pageName" => "Hernández"] se transformará en las variables:
+$languages = "Roberto" y $pageName = "Hernández"
+*/
+extract($controller->newBook());
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,7 +65,7 @@
 
             <h2>Nuevo Libro</h2>
 
-            <form action="" method="post" id="newBookForm" class="mx-auto mt-sm-5">
+            <form action="./newBook.php" method="post" id="newBookForm" class="mx-auto mt-sm-5">
 
                 <div class="form-group mb-3">
                     <label for="isbn">ISBN</label>
@@ -52,7 +79,19 @@
 
                 <div class="form-group mb-3">
                     <label for="publisher">Editorial</label>
-                    <input type="text" class="form-control w-50" id="publisher" name="publisher" required />
+                
+                    <select class="form-select w-50" id="publisher" name="publisher" required>
+
+                        <?php foreach($publishers as $publisher){ ?>
+
+                            <option value="<?php echo($publisher->id); ?>">
+                                <?php echo($publisher->name); ?>
+                            </option>
+                        
+                        <?php } ?>
+
+                    </select>
+                
                 </div>
 
                 <div class="form-group mb-3">
@@ -73,8 +112,15 @@
                 <div class="form-group mb-3">
                     <label for="language">Idioma</label>
                     <select class="form-select w-25" id="language" name="language" required>
-                        <option value="1">Español</option>
-                        <option value="2">Inglés</option>
+
+                        <?php foreach($languages as $lang){ ?>
+
+                            <option value="<?php echo($lang->id); ?>">
+                                <?php echo($lang->name); ?>
+                            </option>
+                        
+                        <?php } ?>
+
                     </select>
                 </div>
 
@@ -82,45 +128,44 @@
                     <label for="authors" class="mb-2">Autor(es)</label>
 
                     <select multiple="multiple" id="authors" name="authors[]">
-                        <option value='1'>Asimov, Isaac</option>
-                        <option value='2'>Dumas, Alexander</option>
-                        <option value='3'>Hawthorne, Nathaniel</option>
-                        <option value='4'>Verne, Julio</option>
-                      </select>
+                        
+                        <?php foreach($authors as $author){ ?>
+
+                            <option value="<?php echo($author->id); ?>">
+                                <?php echo($author->getLastFirst()); ?>
+                            </option>
+
+                        <?php } ?>
+
+                    </select>
+
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="category">Categorías</label>
 
                     <div class="mt-3 categories-list">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" name="category[1]" id="category_1" value="1" />
-                            <label class="form-check-label" for="category_1">Novela</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"  id="category_2" type="checkbox" name="category[2]" value="2" />
-                            <label class="form-check-label" for="category_2">Drama</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"  id="category_3" type="checkbox" name="category[3]" value="3" />
-                            <label class="form-check-label" for="category_3">Comedia</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"  id="category_4" type="checkbox" name="category[4]" value="4" />
-                            <label class="form-check-label" for="category_4">Clásicos</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"  id="category_5" type="checkbox" name="category[5]" value="5" />
-                            <label class="form-check-label" for="category_5">Infantil</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"  id="category_6" type="checkbox" name="category[6]" value="6" />
-                            <label class="form-check-label" for="category_6">Teatro</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input"  id="category_7" type="checkbox" name="category[7]" value="7" />
-                            <label class="form-check-label" for="category_7">Poesía</label>
-                        </div>
+                        
+                        <?php foreach($categories as $category){ ?>
+                        
+                            <div class="form-check form-check-inline">
+                                
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox" 
+                                    name="<?php echo('category[' . $category->id . ']') ?>" 
+                                    id="<?php echo('category_' . $category->id) ?>" 
+                                    value="1" 
+                                />
+
+                                <label class="form-check-label" for="category_1">
+                                    <?php echo($category->name); ?>
+                                </label>
+                            
+                            </div>
+
+                        <?php } ?>
+                        
                     </div>
                     
                 </div>
