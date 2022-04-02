@@ -65,7 +65,19 @@ extract($controller->newBook());
 
             <h2>Nuevo Libro</h2>
 
-            <form action="./newBook.php" method="post" id="newBookForm" class="mx-auto mt-sm-5">
+            <?php
+            if($message){
+
+                $messageClass = ($message["type"] === "error") ? "danger" : "success";
+            ?>
+
+                <div class="alert alert-<?php echo($messageClass); ?>">
+                    <?php echo($message["text"]); ?>
+                </div>
+
+            <?php } ?>
+
+            <form action="./newBook.php" method="post" enctype="multipart/form-data" id="newBookForm" class="mx-auto mt-sm-5">
 
                 <div class="form-group mb-3">
                     <label for="isbn">ISBN</label>
@@ -75,6 +87,16 @@ extract($controller->newBook());
                 <div class="form-group mb-3">
                     <label for="title">Título</label>
                     <input type="text" class="form-control" id="title" name="title" required />
+                </div>
+
+                <div class="mb-3 w-50">
+                    <label for="cover" class="form-label">Portada</label>
+                    <input class="form-control" type="file" id="cover" name="cover" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="price">Precio</label>
+                    <input type="number" class="form-control w-25" id="price" name="price" step="0.1" required />
                 </div>
 
                 <div class="form-group mb-3">
@@ -155,10 +177,10 @@ extract($controller->newBook());
                                     type="checkbox" 
                                     name="<?php echo('category[' . $category->id . ']') ?>" 
                                     id="<?php echo('category_' . $category->id) ?>" 
-                                    value="1" 
+                                    value="<?php echo($category->id); ?>" 
                                 />
 
-                                <label class="form-check-label" for="category_1">
+                                <label class="form-check-label" for="category_<?php echo($category->id); ?>">
                                     <?php echo($category->name); ?>
                                 </label>
                             

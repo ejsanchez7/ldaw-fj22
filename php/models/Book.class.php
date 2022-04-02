@@ -12,6 +12,10 @@ require_once(dirname(__FILE__) . "/Author.class.php");
 
 use models\Author as Author;
 
+require_once(dirname(__FILE__) . "/../utils/utils.php");
+
+use function utils\dump as dump;
+
 /*
 El modelo (clase) Book tiene una función dual: 
 
@@ -172,14 +176,58 @@ class Book{
 
     }
 
-    public static function save($data){
+    //Inserta un libro en la BD
+    public static function insert($data){
 
-        $result = DB::getInstance()->insert(
-            "INSERT INTO books values(?,?,?,?,?,?,?,?,?)",
-            [
-                $data["isbn"]//...
-            ]
-        );
+        //dump($data);
+
+        //Armar la query
+        $query = "INSERT INTO books 
+                (isbn, title, summary, year, edition, price, cover, publisher_id, language_id) 
+                VALUES (?,?,?,?,?,?,?,?,?)";
+
+        //Guardar el libro
+
+        //Obtener la instancia de la BD
+        $bookId = DB::getInstance()->insert($query, [
+            $data["isbn"],
+            $data["title"],
+            $data["summary"],
+            $data["year"],
+            $data["edition"],
+            $data["price"],
+            $data["cover"],
+            $data["publisher_id"],
+            $data["language_id"],
+        ]);
+
+        if($bookId){
+            
+            //Guardar los autores
+            foreach($data["authors"] as $authorId){
+
+                //Armar la query
+                $query = "INSERT INTO authors_books(author_id, book_id) VALUES(?, ?)";
+                //Ejecutar la consulta
+                $id = DB::getInstance()->insert($query, [$authorId, $bookId]);
+
+            }
+
+            //Guardar las categorías
+            foreach($data["categories"] as $categoryId){
+
+                //Armar la query
+                $query = "INSERT INTO books_categories(book_id, category_id) VALUES(?, ?)";
+                //Ejecutar la consulta
+                $id = DB::getInstance()->insert($query, [$bookId, $categoryId]);
+                
+            }
+
+            return true;
+
+        }
+
+        return false;
 
     }
 

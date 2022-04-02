@@ -5,7 +5,10 @@ namespace DB;
 //Indicar que se usará la clase PDO
 use PDO;
 
+use PDOException;
+
 require_once(dirname(__FILE__) . "/../config/config.php");
+
 
 class DB{
 
@@ -53,8 +56,19 @@ class DB{
 
         $st = $this->connection->prepare($query);
 
+        //var_dump($params);die();
+
         //Ejecutar la consulta
-        return $st->execute($params);
+        try{
+            if($st->execute($params)){
+                return $this->connection->lastInsertId();
+            }
+
+            return false;
+        }
+        catch(PDOException $ex){
+            return false;
+        }
 
     }
 

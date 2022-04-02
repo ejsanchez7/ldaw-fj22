@@ -48,6 +48,8 @@ class BooksController{
 
         $books = Book::getBooks();
 
+        //dump($books);
+
         return [
             "books" => $books,
             "pageName" => "index"
@@ -73,6 +75,16 @@ class BooksController{
 
     }
 
+    private function validate($data){
+        //Validar los datos
+        // if(empty($isbn)){
+        //     return [
+        //         "success" => false,
+        //         "message" => "El isbn está vacío"
+        //     ];
+        // }
+    }
+
     private function saveBook(){
 
         //Extraer la información
@@ -84,10 +96,20 @@ class BooksController{
         $summary = $_POST["summary"];
         $language = $_POST["language"];
         $authors = $_POST["authors"];
-        $categories = $_POST["categories"];
+        $categories = $_POST["category"];
+        $price = $_POST["price"];
 
         //Validar los datos
-        Book::save([
+        // $validation = $this->validate(["isbn" => $isbn ...]);
+
+        // if(!$validation["success"]){
+        //     return $validation;
+        // }
+
+        //Guardar el libro
+        /*
+        Opción 1: Crear una instancia y pedirle que se guarde a sí misma
+        $book = new Book([
             "id" => null,
             "isbn" => $isbn,
             "title" => $title,
@@ -98,19 +120,65 @@ class BooksController{
             "authors" => $authors,
             "categories" => $categories
         ]);
+        
+        $book->save();
+        */
 
-        // Book::save([
+        //Guardar la portada
+        $fileContent = file_get_contents($_FILES["cover"]["tmp_name"]);
+        $fileExtension = explode(".", $_FILES["cover"]["name"])[1];
+        $fileName = uniqid() . "." . $fileExtension;
+        $filePath = dirname(__FILE__) . "/../img/books_covers/" . $fileName;
 
-        // ]);
+        //Guardar el archivo
+        file_put_contents($filePath, $fileContent);
+
+        //Opción 2: método estático que guarde los datos
+        $result = Book::insert([
+            "isbn" => $isbn,
+            "title" => $title,
+            "publisher_id" => $publisher,
+            "language_id" => $language,
+            "price" => $price,
+            "cover" => $fileName,
+            "edition" => $edition,
+            "year" => $year,
+            "summary" => $summary,
+            "authors" => $authors,
+            "categories" => $categories
+        ]);
+
+        //Borrar el archivo si falló
+        if(!$result){
+            unlink($filePath);
+        }
+
+        return $result;
 
     }
 
     public function newBook(){
 
+        $message = null;
+
         if(strtolower($_SERVER["REQUEST_METHOD"]) === "post"){
 
-            $this->saveBook();            
-
+            $result = $this->saveBook();    
+            
+            if(!$result){
+                //Mandar mensaje de error
+                $message = [
+                    "type" => "error",
+                    "text" => "Ha ocurrido un error al guardar el libro"
+                ];
+            }
+            else{
+                //Mandar mensaje de éxito
+                $message = [
+                    "type" => "success",
+                    "text" => "El libro se ha guardado exitosamente"
+                ];
+            }
         }
 
         $languages = Language::getAll();
@@ -125,7 +193,8 @@ class BooksController{
             "authors" => $authors,
             "categories" => $categories,
             "publishers" => $publishers,
-            "pageName" => "newBook"
+            "pageName" => "newBook",
+            "message" => $message
         ];
 
     }
