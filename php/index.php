@@ -85,13 +85,24 @@ extract($controller->index());
                             </p>
                         </div>
 
-                        <div class="card-footer">
+                        <div class="card-footer d-flex justify-content-center">
                             <a 
                                 href="./book.php?id=<?php echo($book->id); ?>" 
                                 class="btn btn-primary"
                             >
                                 Detalle
                             </a>
+
+                            <form action="./index.php" method="POST" class="ms-3" >
+
+                                <input type="hidden" value="<?php echo($book->id); ?>" name="id" />
+
+                                <button type="submit" class="btn btn-danger">
+                                    Eliminar
+                                </button>
+                            
+                            </form>
+
                         </div>
 
                     </div>

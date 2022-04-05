@@ -46,6 +46,13 @@ class BooksController{
     //Método de la clase para manejar la vista "index"
     public function index(){
 
+        if(strtolower($_SERVER["REQUEST_METHOD"]) === "post"){
+
+            dump($_POST);
+            //Pedir al model que borre el libro
+
+        }
+
         $books = Book::getBooks();
 
         //dump($books);
