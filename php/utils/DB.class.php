@@ -72,4 +72,20 @@ class DB{
 
     }
 
+    //Método para ejecutar deletes
+    public function delete($query, $params = []){
+
+        $st = $this->connection->prepare($query);
+
+        //Ejecutar la consulta
+        try{
+            $st->execute($params);
+            return true;
+        }
+        catch(PDOException $ex){
+            return false;
+        }
+
+    }
+
 }

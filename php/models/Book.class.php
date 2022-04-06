@@ -231,6 +231,16 @@ class Book{
 
     }
 
+    //Borra un libro de la BD
+    public static function delete($id){
+
+        //Armar la query
+        $query = "DELETE FROM books WHERE id=?";
+
+        //Ejecutar la query
+        return DB::getInstance()->delete($query, [$id]);
+
+    }
 }
 
 

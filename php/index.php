@@ -60,6 +60,18 @@ extract($controller->index());
         <!-- Contenido principal -->
         <main class="container-fluid py-5 mb-5">
 
+            <?php
+            if(!empty($message)){
+
+                $msgClass = ($message["type"] === "success") ? "success" : "danger";
+            ?>
+
+                <div class="alert alert-<?php echo($msgClass); ?>">
+                    <?php echo($message["text"]); ?>
+                </div>
+
+            <?php } ?>
+
             <div class="card-group justify-content-center books-container">
 
                 <?php foreach($books as $book){ ?>
