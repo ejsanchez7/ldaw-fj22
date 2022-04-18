@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Simulación temporal de datos de autores
+const AUTHORS = [
+    ["id" => 1, "first_name" => "Alejandro", "last_name" => "Dumas"],
+    ["id" => 2, "first_name" => "Nathaniel", "last_name" => "Hawthorne"],
+    ["id" => 3, "first_name" => "Patrick", "last_name" => "Süskind"],
+];
+
 /*
 La clase Route de laravel es la encargada de definir las rutas que se usarán en la apliación.
 Entre otros métodos, cuenta con un método estático para cada posible acción de HTTP:
