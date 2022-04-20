@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 //Simulación temporal de datos de autores
 const AUTHORS = [
-    ["id" => 1, "first_name" => "Alejandro", "last_name" => "Dumas"],
-    ["id" => 2, "first_name" => "Nathaniel", "last_name" => "Hawthorne"],
+    ["id" => 2, "first_name" => "Alejandro", "last_name" => "Dumas"],
+    ["id" => 1, "first_name" => "Nathaniel", "last_name" => "Hawthorne"],
     ["id" => 3, "first_name" => "Patrick", "last_name" => "Süskind"],
 ];
 
@@ -62,4 +63,93 @@ se puede usar como "atajo" el método estático "view" que funcionará como un g
 return de una vista.
 */
 Route::view("/about-us", "aboutUs");
+
+/*
+El método "prefix" permite definir un prefijo para un conjunto de rutas determinado, va encadenado
+al método "group" donde se definen las rutas que tendrán ese prefijo previo a la definición de su
+patrón.
+*/
+Route::prefix('authors')->group(function(){
+
+    //Index de autores (listado)
+    Route::get("/", function(){
+
+        //Consulta para obtener los autores
+
+        /*
+        El formato "authors.index" indica que la vista de nombre "index.blade.php" estará almacenada
+        en el subdirectorio "authors" de "resources/views"
+        */
+        return view("authors.index", ["authors" => AUTHORS]);
+
+    });
+
+    /*
+    Edición de autor
+    -----------------
+    Los parámetros en las rutas se definen con el "wildcard" {parameterName}. Una vez que la ruta es
+    parseada, y los parámetros extraídos, se inyectan en la función controladora en el mismo orden
+    en que fueron definidos (no es necesario que el nombre del parámetro de la función corresponda
+    con el de la ruta)
+
+    Si un parámetro es opcional se define como {parameterName?}, con un signo de interrogación al final
+    */
+    Route::get("/edit/{id}", function($id){
+
+        $author = null;
+
+        //Encontrar el autor
+        foreach(AUTHORS as $a){
+
+            if($a["id"] === intval($id)){
+                $author = $a;
+            }
+
+        }
+
+        if(!empty($author)){
+            /*
+            Las vistas pueden recibir un segundo parámetro, a manera de arreglo, 
+            con información a pasar a la vista. Los datos se extraen en variables
+            en la vista automáticamente.
+            */
+            return view("authors.edit", ["author" => $author]);
+
+        }
+        else{
+            return view("error", ["message" => "No se encontró el autor"]);
+        }
+
+    })->whereNumber("id");//Verifica que el parámetro sea numérico
+
+    /*
+    Ruta que procesará el formulario de edición de autores
+
+    Laravel usa inyección de dependencias, esto prácticamente indica que se puede pasar como
+    parámetro un objeto de cualquier clase definida en el proyecto a una función y este objeto
+    será creado automáticamente por laravel previamente para inyectar la instancia en la función.
+    Para ello usa algo mágico llamado "reflexión".
+
+    La clase Request es una clase de Laravel que se encarga de manejar las propiedades de la petición 
+    enviada y los parámetros que viajan en ella, es una forma más poderosa y práctica de tener acceso
+    a los datos enviados por get y post.
+
+    En las rutas primero van las dependencias inyectadas y posteriormente los parámetros de la ruta en
+    el mismo orden en el que se definieron.
+    */
+    Route::post("/edit/{id}", function(Request $request, $id){
+
+        dump($id);
+        dd($request->input("first_name"));
+
+        //Procesar la edición
+        //UPDATE WHERE id=$id
+
+    });
+
+});
+
+//Crear autores
+
+
 

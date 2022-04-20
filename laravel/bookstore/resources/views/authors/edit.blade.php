@@ -106,10 +106,10 @@
 
             <h1 class="text-center mb-4" >Editar Autor</h1>
 
-            <form action="<?php echo(url("authors/update", ["id" => $author["id"]])); ?>" method="post" id="newAuthorForm" class="mx-auto mt-sm-5">
+            <form action="<?php echo(url("authors/edit", ["id" => $author["id"]])); ?>" method="post" id="newAuthorForm" class="mx-auto mt-sm-5">
 
                 <!--
-                Este es un tal especial de blade que sirve para generar un token CSRF para evitar ataques de este tipo
+                Este es una directiva de blade que sirve para generar un token CSRF para evitar ataques de este tipo
                 -->
                 @csrf
 
@@ -142,9 +142,9 @@
                 
                     <select class="form-select w-50" id="country" name="country" required>
                         <option value="1">Alemania</option>
-                        <option value="1">Estados Unidos</option>
-                        <option value="1">Francia</option>
-                        <option value="1">México</option>
+                        <option value="2">Estados Unidos</option>
+                        <option value="3">Francia</option>
+                        <option value="4">México</option>
                     </select>
                 
                 </div>
