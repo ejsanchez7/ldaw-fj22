@@ -16,9 +16,9 @@ use Illuminate\Http\Request;
 
 //Simulación temporal de datos de autores
 const AUTHORS = [
-    ["id" => 2, "first_name" => "Alejandro", "last_name" => "Dumas"],
-    ["id" => 1, "first_name" => "Nathaniel", "last_name" => "Hawthorne"],
-    ["id" => 3, "first_name" => "Patrick", "last_name" => "Süskind"],
+    ["id" => 2, "first_name" => "Alejandro", "last_name" => "Dumas", "country_id" => 3],
+    ["id" => 1, "first_name" => "Nathaniel", "last_name" => "Hawthorne", "country_id" => 2],
+    ["id" => 3, "first_name" => "Patrick", "last_name" => "Süskind", "country_id" => 1],
 ];
 
 /*
@@ -113,7 +113,16 @@ Route::prefix('authors')->group(function(){
             con información a pasar a la vista. Los datos se extraen en variables
             en la vista automáticamente.
             */
-            return view("authors.edit", ["author" => $author]);
+            return view("authors.edit", [
+                "author" => $author,
+                "countries" => [
+                    "1" => "Alemania",
+                    "2" => "Estados Unidos",
+                    "3" => "Francia",
+                    "4" => "México",
+                    "5" => "Noruega"
+                ]
+            ]);
 
         }
         else{

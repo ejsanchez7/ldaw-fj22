@@ -1,7 +1,20 @@
+{{--  
+La directiva @extends indica el layout que se usará como base para inyectar el
+contenido de esta vista en secciones específicas del layout indicadas por @yield
+y @stack.
+--}}
 @extends('layouts.main')
 
-@section('pageTitle', "Catálogo de Libros") 
+{{-- 
+La directiva @section indica el contenido que se inyectará en las secciones definidas
+con @yield en el layout.
+--}}
+@section('pageTitle', "Acerca de nosotros") 
 
+{{--
+@section tiene una segunda sintaxis con un tag de apertura y cierre para agregar contenido
+más extenso dentro de la sección    
+--}}
 @section('mainContent')
     
     <h1 class="text-center mb-4" >Acerca de nosotros</h1>
