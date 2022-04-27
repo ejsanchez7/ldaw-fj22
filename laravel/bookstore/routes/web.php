@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+//Importar controllers para manejar la lógica en archivos independientes
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\AuthorController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,13 +17,6 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-//Simulación temporal de datos de autores
-const AUTHORS = [
-    ["id" => 2, "first_name" => "Alejandro", "last_name" => "Dumas", "country_id" => 3],
-    ["id" => 1, "first_name" => "Nathaniel", "last_name" => "Hawthorne", "country_id" => 2],
-    ["id" => 3, "first_name" => "Patrick", "last_name" => "Süskind", "country_id" => 1],
-];
 
 /*
 La clase Route de laravel es la encargada de definir las rutas que se usarán en la apliación.
@@ -64,101 +61,43 @@ return de una vista.
 */
 Route::view("/about-us", "aboutUs");
 
-/*
-El método "prefix" permite definir un prefijo para un conjunto de rutas determinado, va encadenado
-al método "group" donde se definen las rutas que tendrán ese prefijo previo a la definición de su
-patrón.
+/* 
+Los métodos estáticos post, get, delete, patch, put, etc. de la clase "Route" tienen 
+una sintaxis alternativa para que las rutas puedan ser vinculadas a métodos definidos
+en controladores en lugar de a funciones anónimas definidas en la misma routa (closures).
+
+En esta sintaxis el segundo parámetro pasa de ser una función a ser un arreglo de
+exactamente dos localidades:
+    + En la primera irá el nombre de la clase del controlador que manejará la lógica.
+    + En la segunda el nombre del método, de ese controlador, que se ejecutará al 
+      cargar la ruta.
+Previo a esto el controlador debió ser importado con "use" (ver al inicio de este archivo)
 */
-Route::prefix('authors')->group(function(){
+Route::get("/test", [TestController::class, "doSomething"]);
 
-    //Index de autores (listado)
-    Route::get("/", function(){
+//Las rutas pueden ejecutar el método "name" que permite asociar nombres como "alias"
+//a ellas
+Route::get("authors", [AuthorController::class, "otherMethod"])->name("authors.other");
 
-        //Consulta para obtener los autores
+/*
+Cuando se crea un controller usando "artisan", la línea de comandos de laravel (php artisan 
+make:controller --resource AuthorController), se crea una clase controller prellenada
+con las firmas de los métodos para un CRUD, estos métodos tienen nombres estándar que
+le permiten a laravel inferir la configuración de las rutas que se tendrían que hacer para 
+ellos, por lo tanto es posible indicar a laravel que genere TODAS las rutas necesarias
+para los métodos de este tipo de controllers con la siguiente instrucción.
 
-        /*
-        El formato "authors.index" indica que la vista de nombre "index.blade.php" estará almacenada
-        en el subdirectorio "authors" de "resources/views"
-        */
-        return view("authors.index", ["authors" => AUTHORS]);
+El método "resource" solo recibe la clase del resource controller para el cual generará las
+rutas, no necesita saber el nombre de los métodos dado que estos son los métodos estándar 
+de laravel.
+*/
+Route::resource('authors', AuthorController::class);
 
-    });
 
-    /*
-    Edición de autor
-    -----------------
-    Los parámetros en las rutas se definen con el "wildcard" {parameterName}. Una vez que la ruta es
-    parseada, y los parámetros extraídos, se inyectan en la función controladora en el mismo orden
-    en que fueron definidos (no es necesario que el nombre del parámetro de la función corresponda
-    con el de la ruta)
-
-    Si un parámetro es opcional se define como {parameterName?}, con un signo de interrogación al final
-    */
-    Route::get("/edit/{id}", function($id){
-
-        $author = null;
-
-        //Encontrar el autor
-        foreach(AUTHORS as $a){
-
-            if($a["id"] === intval($id)){
-                $author = $a;
-            }
-
-        }
-
-        if(!empty($author)){
-            /*
-            Las vistas pueden recibir un segundo parámetro, a manera de arreglo, 
-            con información a pasar a la vista. Los datos se extraen en variables
-            en la vista automáticamente.
-            */
-            return view("authors.edit", [
-                "author" => $author,
-                "countries" => [
-                    "1" => "Alemania",
-                    "2" => "Estados Unidos",
-                    "3" => "Francia",
-                    "4" => "México",
-                    "5" => "Noruega"
-                ]
-            ]);
-
-        }
-        else{
-            return view("error", ["message" => "No se encontró el autor"]);
-        }
-
-    })->whereNumber("id");//Verifica que el parámetro sea numérico
-
-    /*
-    Ruta que procesará el formulario de edición de autores
-
-    Laravel usa inyección de dependencias, esto prácticamente indica que se puede pasar como
-    parámetro un objeto de cualquier clase definida en el proyecto a una función y este objeto
-    será creado automáticamente por laravel previamente para inyectar la instancia en la función.
-    Para ello usa algo mágico llamado "reflexión".
-
-    La clase Request es una clase de Laravel que se encarga de manejar las propiedades de la petición 
-    enviada y los parámetros que viajan en ella, es una forma más poderosa y práctica de tener acceso
-    a los datos enviados por get y post.
-
-    En las rutas primero van las dependencias inyectadas y posteriormente los parámetros de la ruta en
-    el mismo orden en el que se definieron.
-    */
-    Route::post("/edit/{id}", function(Request $request, $id){
-
-        dump($id);
-        dd($request->input("first_name"));
-
-        //Procesar la edición
-        //UPDATE WHERE id=$id
-
-    });
-
-});
 
 //Crear autores
+
+
 
 
 

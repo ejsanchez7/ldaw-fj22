@@ -15,7 +15,7 @@
         que la ruta declarada el "/routes/web.php" se haya configurado
         para recibir parámetros.   
         --}}
-        action="{{ url("authors/edit", ["id" => $author["id"]]) }}" 
+        action="{{ route("authors.update", ["author" => $author["id"]]) }}" 
         method="post" 
         id="newAuthorForm" 
         class="mx-auto mt-sm-5"
@@ -26,6 +26,9 @@
         CSRF para evitar ataques de este tipo
         --}}
         @csrf
+
+        {{-- Esto sobreescribe el método del formulario --}}
+        @method('PUT')
 
         <div class="form-group mb-3">
             <label for="first_name">Nombre</label>
