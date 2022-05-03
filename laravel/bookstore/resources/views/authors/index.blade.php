@@ -6,7 +6,7 @@
     
     <h1 class="text-center mb-4">Autores</h1>
 
-    <ul class="list-group">
+    <ul class="list-group w-50 mx-auto">
         
         {{--
         blade cuenta con directivas para realizar ciclos, condicionales y
@@ -18,8 +18,9 @@
         --}}
         @forelse($authors as $author)
 
-            <li class="list-group-item">
-                {{ $author["first_name"] . " " . $author["last_name"] }}
+            <li class="list-group-item d-flex justify-content-between">
+                <p class="mb-0">{{ $author->fullName() }}<p>
+                <span class="badge bg-info">{{ $author->country->name }}</span>
             </li>
 
         @empty

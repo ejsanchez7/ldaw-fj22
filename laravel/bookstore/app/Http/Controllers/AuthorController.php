@@ -16,15 +16,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+//Importar el modelo de autores
+use App\Models\Author;
+
+
 class AuthorController extends Controller
 {
 
     //Simulación temporal de datos de autores
-    private $authors = [
-        ["id" => 2, "first_name" => "Alejandro", "last_name" => "Dumas", "country_id" => 3],
-        ["id" => 1, "first_name" => "Nathaniel", "last_name" => "Hawthorne", "country_id" => 2],
-        ["id" => 3, "first_name" => "Patrick", "last_name" => "Süskind", "country_id" => 1],
-    ];
+    // private $authors = [
+    //     ["id" => 2, "first_name" => "Alejandro", "last_name" => "Dumas", "country_id" => 3],
+    //     ["id" => 1, "first_name" => "Nathaniel", "last_name" => "Hawthorne", "country_id" => 2],
+    //     ["id" => 3, "first_name" => "Patrick", "last_name" => "Süskind", "country_id" => 1],
+    // ];
 
 
     /**
@@ -35,12 +39,15 @@ class AuthorController extends Controller
     public function index()
     {
         //Consulta para obtener los autores
+        $authors = Author::all();
+
+        //dd($authors);
 
         /*
         El formato "authors.index" indica que la vista de nombre "index.blade.php" estará almacenada
         en el subdirectorio "authors" de "resources/views"
         */
-        return view("authors.index", ["authors" => $this->authors]);
+        return view("authors.index", ["authors" => $authors]);
     }
 
     /**

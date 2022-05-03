@@ -12,8 +12,19 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        // \App\Models\User::factory(10)->create();
+    public function run(){
+
+        //Permite invocar otros seeders en el orden en que aparecen
+        $this->call([
+            CategorySeeder::class,
+            CountrySeeder::class,
+            LanguageSeeder::class,
+            PublisherSeeder::class,
+            AuthorSeeder::class,
+            BookSeeder::class,
+            AuthorBookSeeder::class,
+            BookCategorySeeder::class,
+        ]);
+    
     }
 }
