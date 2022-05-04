@@ -15,6 +15,7 @@ class Author extends Model{
     public $timestamps = false;
 
     //Asociación con countries
+    //(https://laravel.com/docs/9.x/eloquent-relationships#one-to-many-inverse)
     public function country(){
 
         return $this->belongsTo(Country::class);

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 //Importar controllers para manejar la lógica en archivos independientes
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -91,7 +93,14 @@ El método "resource" solo recibe la clase del resource controller para el cual 
 rutas, no necesita saber el nombre de los métodos dado que estos son los métodos estándar 
 de laravel.
 */
-Route::resource('authors', AuthorController::class);
+
+//https://laravel.com/docs/9.x/controllers#actions-handled-by-resource-controller
+// Route::resource('authors', AuthorController::class);
+// Route::resource('books', BookController::class);
+Route::resources([
+  'authors' => AuthorController::class,
+  'books' => BookController::class
+]);
 
 
 
