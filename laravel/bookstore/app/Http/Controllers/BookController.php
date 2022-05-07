@@ -47,9 +47,10 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function show(Book $book)
-    {
-        //
+    public function show(Book $book){
+        
+        return view("books.detail", ["book" => $book]);
+
     }
 
     /**
@@ -81,8 +82,22 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Book $book)
-    {
-        //
+    public function destroy(Book $book){
+        
+        //Usando el query builder
+        //https://laravel.com/docs/9.x/queries#delete-statements
+        //Book::where("id", "=", $id)->delete();
+
+        //Usando la instancia del modelo
+        $book->delete();
+        //https://laravel.com/docs/9.x/responses#redirecting-named-routes
+        //https://laravel.com/docs/9.x/responses#redirecting-with-flashed-session-data
+        return redirect()
+                ->route('books.index')
+                ->with('message', [
+                    "type" => "success",
+                    "text" => "El libro se borró exitosamente"
+                ]);
+
     }
 }

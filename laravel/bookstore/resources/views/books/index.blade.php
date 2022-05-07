@@ -11,9 +11,10 @@
 
 @section('mainContent')
 
-    @if(isset($message))
+    @if(session('message'))
 
         @php
+            $message = session('message');
             $msgClass = ($message["type"] === "success") ? "success" : "danger";
         @endphp
 
@@ -57,9 +58,15 @@
                         Detalle
                     </a>
 
-                    <form action="" method="POST" class="ms-3" >
+                    <form 
+                        action="{{ route("books.destroy", ["book" => $book->id]) }}" 
+                        method="POST" 
+                        class="ms-3" 
+                    >
 
-                        <input type="hidden" value="{{ $book->id }}" name="id" />
+                        @csrf
+                        @method("DELETE")
+                        {{-- <input type="hidden" value="DELETE" name="_method" /> --}}
 
                         <button type="submit" class="btn btn-danger">
                             Eliminar
