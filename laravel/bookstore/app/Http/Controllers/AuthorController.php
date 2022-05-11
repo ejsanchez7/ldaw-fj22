@@ -5,6 +5,8 @@ Este es un controller creado con el comando:
 
     php artisan make:controller --resource AuthorController
 
+https://laravel.com/docs/9.x/controllers#resource-controllers
+
 Al incluir el parámetro "--resource" en su creación es denominado "resource controller".
 Un resource controller es un controlador de Laravel que viene prellenado con las "firmas"
 de los métodos necesarios para manejar el CRUD de algún recurso (tabla), de modo que

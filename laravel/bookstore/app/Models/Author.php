@@ -22,9 +22,23 @@ class Author extends Model{
 
     }
 
+    //Devuelve todas las editoriales ordenadas por nombre
+    public static function getAll(){
+
+        return Author::orderBy("last_name", "asc")->get();
+
+    }
+
     public function fullName(){
 
         return ($this->first_name . " " . $this->last_name);
+
+    }
+
+    //Devuelve el nombre del autor en formato Apellido, Nombre
+    public function getLastFirst(){
+
+        return ($this->last_name . ", " . $this->first_name);
 
     }
 

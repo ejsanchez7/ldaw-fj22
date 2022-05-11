@@ -17,6 +17,21 @@ class Book extends Model{
     //https://laravel.com/docs/9.x/eloquent#table-names
     //protected $table = "libros";
 
+    //Indicar que se puede insertar en la tabla books pasando los siguientes campos en un arreglo
+    //https://laravel.com/docs/9.x/eloquent#mass-assignment
+    protected $fillable= [
+        "isbn",
+        "title",
+        "summary",
+        "year",
+        "edition",
+        "price",
+        "cover",
+        "publisher_id",
+        "language_id"
+    ];
+
+
     //Configuración de asociación N:N con autores
     //https://laravel.com/docs/9.x/eloquent-relationships#many-to-many
     public function authors(){
@@ -57,7 +72,18 @@ class Book extends Model{
 
     //Devuelve el listado de autores separado por comas
     public function authorsNames(){
-        return "";
+        
+        $authors = $this->authors;
+        $names = [];
+
+        foreach($authors as $author){
+
+            $names[] = $author->fullName();
+
+        }
+
+        return implode(", ", $names);
+
     }
 
 }

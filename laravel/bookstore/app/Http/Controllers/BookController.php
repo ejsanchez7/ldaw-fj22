@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Publisher;
+use App\Models\Language;
+use App\Models\Author;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -25,9 +29,20 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(){
+        
+        $publishers = Publisher::getAll();
+        $languages = Language::getAll();
+        $authors = Author::getAll();
+        $categories = Category::getAll();
+
+        return view("books.create", [
+            "publishers" => $publishers, 
+            "languages" => $languages,
+            "authors" => $authors,
+            "categories" => $categories
+        ]);
+        
     }
 
     /**
@@ -36,9 +51,30 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+
+        //Guardar el libro
+        $newBook = Book::create([
+            "isbn" => $request->input("isbn"),
+            "title" => $request->input("title"),
+            "summary" => $request->input("summary"),
+            "year" => $request->input("year"),
+            "edition" => $request->input("edition"),
+            "price" => $request->input("price"),
+            "cover" => "",//$request->input("cover"),
+            "publisher_id" => $request->input("publisher"),
+            "language_id" => $request->input("language")
+        ]);
+
+        // //Autores
+        // foreach($request->input("authors") as $authorId){
+
+        //      $book->authors() 
+
+        // }
+
+        // //Categorías
+
     }
 
     /**
