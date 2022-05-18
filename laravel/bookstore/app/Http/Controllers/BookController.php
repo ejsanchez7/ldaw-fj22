@@ -15,9 +15,33 @@ use Illuminate\Database\QueryException;
 //Clase para el manejo del storage (archivos) de laravel
 use Illuminate\Support\Facades\Storage;
 
+//Clase para construir un validador personalizado
+use Illuminate\Support\Facades\Validator;
 
-class BookController extends Controller
-{
+
+class BookController extends Controller{
+
+    //Genera una instancia del validador para crear/actualizar libros
+    private function buildValidator($data){
+
+        //https://laravel.com/docs/9.x/validation#manually-creating-validators
+        $validator = Validator::make($data, [
+            //https://laravel.com/docs/9.x/validation#available-validation-rules
+            "isbn" => ["bail", "required", "alpha_num", "max:13", "min:10", "unique:books,isbn"],
+            "title" => ["bail", "required", "max:255"],
+            "summary" => ["bail", "nullable"],
+            "year" => ["bail", "required", "integer", "max:" . date("Y")],
+            "edition" => ["bail", "required", "alpha_num", "max:10"],
+            "price" => ["bail", "required", "numeric", "min:0", "max:99999"],
+            "cover" => ["bail", "required", "file", "image"],
+            "publisher" => ["bail", "required", "integer", "exists:publishers,id"],
+            "language" => ["bail", "required", "integer", "exists:languages,id"]
+        ]);
+
+        return $validator;
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -61,6 +85,50 @@ class BookController extends Controller
     public function store(Request $request){
 
         //dd($request->all());
+
+        //Validar los datos
+
+        //Método 1 (más simple): invocar el método validate en la petición
+        // $request->validate([
+        //     "isbn" =>
+        //     "title" =>
+        // ]);
+
+        //Método 3 (más complejo): construir una clase Request personalizada que implemente los
+        //métodos de validación. php artisan make:request
+
+        //Método 2 (recomendado): generar una instancia del validador por medio de la clase Validator
+        
+        $data = [
+            "isbn" => "aaaaaaaaaa#",//["bail", "required", "alpha_num", "max:13", "min:10", "unique:books,isbn"],
+            "title" => ["bail", "required", "max:255"],
+            "summary" => ["bail", "nullable"],
+            "year" => ["bail", "required", "integer", "max:" . date("Y")],
+            "edition" => ["bail", "required", "alpha_num", "max:10"],
+            "price" => ["bail", "required", "numeric", "min:0", "max:99999"],
+            "cover" => ["bail", "required", "file", "image"],
+            "publisher" => ["bail", "required", "integer", "exists:publishers,id"],
+            "language" => ["bail", "required", "integer", "exists:languages,id"]
+        ];
+
+        //Construir el validador
+        $validator = $this->buildValidator($data);
+
+        //Invocar el validador y verificar si falló
+        if ($validator->fails()) {
+
+            dd($validator->errors());
+
+            /*
+            return redirect('post/create')
+                        ->withErrors($validator)
+                        ->withInput();
+            */
+        }
+
+        dd("valid");
+
+        //Si los datos son válidos ejecutar el proceso
 
         //Procesamiento del archivo de portada
         //https://laravel.com/docs/9.x/filesystem#file-uploads
