@@ -25,18 +25,49 @@ class BookController extends Controller{
     private function buildValidator($data){
 
         //https://laravel.com/docs/9.x/validation#manually-creating-validators
-        $validator = Validator::make($data, [
-            //https://laravel.com/docs/9.x/validation#available-validation-rules
-            "isbn" => ["bail", "required", "alpha_num", "max:13", "min:10", "unique:books,isbn"],
-            "title" => ["bail", "required", "max:255"],
-            "summary" => ["bail", "nullable"],
-            "year" => ["bail", "required", "integer", "max:" . date("Y")],
-            "edition" => ["bail", "required", "alpha_num", "max:10"],
-            "price" => ["bail", "required", "numeric", "min:0", "max:99999"],
-            "cover" => ["bail", "required", "file", "image"],
-            "publisher" => ["bail", "required", "integer", "exists:publishers,id"],
-            "language" => ["bail", "required", "integer", "exists:languages,id"]
-        ]);
+        $validator = Validator::make(
+                $data, //Información a validar
+                //Reglas a aplicar
+                [
+                    //https://laravel.com/docs/9.x/validation#available-validation-rules
+                    "isbn" => ["bail", "required", "alpha_num", "max:13", "min:10", "unique:books,isbn"],
+                    "title" => ["bail", "required", "max:255"],
+                    "summary" => ["bail", "nullable"],
+                    "year" => ["bail", "required", "integer", "max:" . date("Y")],
+                    "edition" => ["bail", "required", "alpha_num", "max:10"],
+                    "price" => ["bail", "required", "numeric", "min:0", "max:99999"],
+                    "cover" => ["bail", "required", "file", "image"],
+                    "publisher" => ["bail", "required", "integer", "exists:publishers,id"],
+                    "language" => ["bail", "required", "integer", "exists:languages,id"]
+                ],
+                //Mensajes personalizados
+                //https://laravel.com/docs/9.x/validation#manual-customizing-the-error-messages
+                [
+                    "required" => '":attribute" no puede estar vacío',
+                    "isbn.min" => '":attribute" no puede ser menor a :min caracteres',
+                    "isbn.max" => '":attribute" no puede ser mayor a :max caracteres',
+                    "title.max" => '":attribute" no puede ser mayor a :max caracteres',
+                    "edition.max" => '":attribute" no puede ser mayor a :max caracteres',
+                    "min" => '":attribute" no puede ser menor a :min',
+                    "max" => '":attribute" no puede ser mayor a :max',
+                    "unique" => 'El valor de ":attribute" ya existe en el sistema',
+                    "alpha_num" => '":attribute" debe ser alfanumérico',
+                    "integer" => '":attribute" debe ser un número entero',
+                    "numeric" => '":attribute" debe ser un número',
+                    "image" => '":attribute" debe ser un archivo de imagen',
+                    "exists" => '":attribute" debe existir en el sistema'
+                ],
+                //https://laravel.com/docs/9.x/validation#specifying-custom-attribute-values
+                [
+                    "title" => "Título",
+                    "year" => "Año",
+                    "edition" => "Edición",
+                    "price" => "Precio",
+                    "cover" => "Portada",
+                    "publisher" => "Editorial",
+                    "language" => "Idioma"
+                ]
+        );
 
         return $validator;
 
@@ -99,34 +130,23 @@ class BookController extends Controller{
 
         //Método 2 (recomendado): generar una instancia del validador por medio de la clase Validator
         
-        $data = [
-            "isbn" => "aaaaaaaaaa#",//["bail", "required", "alpha_num", "max:13", "min:10", "unique:books,isbn"],
-            "title" => ["bail", "required", "max:255"],
-            "summary" => ["bail", "nullable"],
-            "year" => ["bail", "required", "integer", "max:" . date("Y")],
-            "edition" => ["bail", "required", "alpha_num", "max:10"],
-            "price" => ["bail", "required", "numeric", "min:0", "max:99999"],
-            "cover" => ["bail", "required", "file", "image"],
-            "publisher" => ["bail", "required", "integer", "exists:publishers,id"],
-            "language" => ["bail", "required", "integer", "exists:languages,id"]
-        ];
-
         //Construir el validador
-        $validator = $this->buildValidator($data);
+        $validator = $this->buildValidator($request->all());
 
         //Invocar el validador y verificar si falló
         if ($validator->fails()) {
 
-            dd($validator->errors());
-
-            /*
-            return redirect('post/create')
+            //dd($validator->errors());
+            //https://laravel.com/docs/9.x/responses#redirecting-named-routes
+            return redirect()->route("books.create")
+                        //https://laravel.com/docs/9.x/validation#manually-creating-validators
                         ->withErrors($validator)
+                        //https://laravel.com/docs/9.x/responses#redirecting-with-input
                         ->withInput();
-            */
+            
         }
 
-        dd("valid");
+        //dd("valid");
 
         //Si los datos son válidos ejecutar el proceso
 

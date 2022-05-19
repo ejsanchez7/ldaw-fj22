@@ -28,6 +28,18 @@
         </div>
     
     @endif
+    
+    {{-- 
+    Desplegar errores de validación
+    https://laravel.com/docs/9.x/validation#quick-displaying-the-validation-errors
+     --}}
+    @if($errors->any())
+        
+        @foreach($errors->all() as $error)
+            <div class="alert alert-danger">{{ $error }}</div>
+        @endforeach
+    
+    @endif
 
     <form 
         action="{{ route("books.store") }}" 
@@ -35,18 +47,34 @@
         enctype="multipart/form-data" 
         id="newBookForm" 
         class="mx-auto mt-sm-5"
+        novalidate
     >
 
         @csrf
 
         <div class="form-group mb-3">
             <label for="isbn">ISBN</label>
-            <input type="text" class="form-control" id="isbn" name="isbn" required />
+            <input 
+                type="text" 
+                class="form-control" 
+                id="isbn" 
+                name="isbn" 
+                {{-- https://laravel.com/docs/9.x/helpers#method-old --}}
+                value="{{ old("isbn") }}"
+                required 
+            />
         </div>
 
         <div class="form-group mb-3">
             <label for="title">Título</label>
-            <input type="text" class="form-control" id="title" name="title" required />
+            <input 
+                type="text" 
+                class="form-control" 
+                id="title" 
+                name="title" 
+                value="{{ old("title") }}"
+                required 
+            />
         </div>
 
         <div class="mb-3 w-50">
@@ -56,7 +84,15 @@
 
         <div class="form-group mb-3">
             <label for="price">Precio</label>
-            <input type="number" class="form-control w-25" id="price" name="price" step="0.1" required />
+            <input 
+                type="number" 
+                class="form-control w-25" 
+                id="price" 
+                name="price" 
+                step="0.1" 
+                value="{{ old("price") }}"
+                required 
+            />
         </div>
 
         <div class="form-group mb-3">
@@ -66,7 +102,11 @@
 
                 @foreach($publishers as $publisher)
 
-                    <option value="{{ $publisher->id }}">
+                    <option 
+                        value="{{ $publisher->id }}"
+                        {{-- https://laravel.com/docs/9.x/blade#checked-and-selected --}}
+                        @selected(old('publisher') == $publisher->id)
+                    >
                         {{ $publisher->name }}
                     </option>
                 
@@ -78,17 +118,32 @@
 
         <div class="form-group mb-3">
             <label for="edition">Edición</label>
-            <input type="text" class="form-control w-50" id="edition" name="edition" required />
+            <input 
+                type="text" 
+                class="form-control w-50" 
+                id="edition" 
+                name="edition" 
+                value="{{ old("edition") }}"
+                required 
+            />
         </div>
 
         <div class="form-group mb-3">
             <label for="year">Año</label>
-            <input type="number" class="form-control w-25" id="year" name="year" step="1" required />
+            <input 
+                type="number" 
+                class="form-control w-25" 
+                id="year" 
+                name="year" 
+                step="1" 
+                value="{{ old("year") }}"
+                required 
+            />
         </div>
 
         <div class="form-group mb-3">
             <label for="summary">Sinopsis</label>
-            <textarea class="form-control" id="summary" name="summary" ></textarea>
+            <textarea class="form-control" id="summary" name="summary" >{{ old("summary") }}</textarea>
         </div>
 
         <div class="form-group mb-3">
@@ -97,7 +152,7 @@
 
                 @foreach($languages as $lang)
 
-                    <option value="{{ $lang->id }}">
+                    <option value="{{ $lang->id }}"  @selected(old('language') == $lang->id) >
                         {{ $lang->name }}
                     </option>
                 
@@ -113,7 +168,10 @@
                 
                 @foreach($authors as $author)
 
-                    <option value="{{ $author->id }}">
+                    <option 
+                        value="{{ $author->id }}"
+                        @selected(in_array($author->id, old('authors',[])))
+                    >
                         {{ $author->getLastFirst() }}
                     </option>
 
@@ -138,6 +196,7 @@
                             name="category[{{ $category->id }}]" 
                             id="category_{{ $category->id }}" 
                             value="{{ $category->id }}" 
+                            @checked(in_array($category->id, old('category',[])))
                         />
 
                         <label class="form-check-label" for="category_{{ $category->id }}">
