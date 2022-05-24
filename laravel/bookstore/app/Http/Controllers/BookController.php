@@ -22,24 +22,36 @@ use Illuminate\Support\Facades\Validator;
 class BookController extends Controller{
 
     //Genera una instancia del validador para crear/actualizar libros
-    private function buildValidator($data){
+    private function buildValidator($data, $action = "create"){
+
+        //Poner las reglas aparte para poder modificarlas previo a pasarlas al validador
+        //https://laravel.com/docs/9.x/validation#available-validation-rules
+        $rules = [
+            "isbn" => ["bail", "required", "min:10", "max:13", "alpha_num"],
+            "title" => ["bail", "required", "max:255"],
+            "summary" => ["bail", "nullable"],
+            "year" => ["bail", "required", "integer", "max:" . date("Y")],
+            "edition" => ["bail", "required", "max:10"],
+            "price" => ["bail", "required", "min:0", "max:99999", "numeric"],
+            "cover" => ["bail", "required", "file", "image"],
+            "publisher" => ["bail", "required", "exists:publishers,id"],
+            "language" => ["bail", "required", "exists:publishers,id"]
+        ];
+
+        //Si es edición, hacer opcional la validación del archivo de portada
+        if($action === "edit"){
+            $rules["cover"] = ["bail", "nullable", "file", "image"];
+        }
+        else{
+            //Si es modo creación, agregar el unique al isbn
+            $rules["isbn"][] = "unique:books,isbn";
+        }
 
         //https://laravel.com/docs/9.x/validation#manually-creating-validators
         $validator = Validator::make(
                 $data, //Información a validar
                 //Reglas a aplicar
-                [
-                    //https://laravel.com/docs/9.x/validation#available-validation-rules
-                    "isbn" => ["bail", "required", "alpha_num", "max:13", "min:10", "unique:books,isbn"],
-                    "title" => ["bail", "required", "max:255"],
-                    "summary" => ["bail", "nullable"],
-                    "year" => ["bail", "required", "integer", "max:" . date("Y")],
-                    "edition" => ["bail", "required", "alpha_num", "max:10"],
-                    "price" => ["bail", "required", "numeric", "min:0", "max:99999"],
-                    "cover" => ["bail", "required", "file", "image"],
-                    "publisher" => ["bail", "required", "integer", "exists:publishers,id"],
-                    "language" => ["bail", "required", "integer", "exists:languages,id"]
-                ],
+                $rules,
                 //Mensajes personalizados
                 //https://laravel.com/docs/9.x/validation#manual-customizing-the-error-messages
                 [
@@ -241,9 +253,21 @@ class BookController extends Controller{
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(Book $book)
-    {
-        //
+    public function edit(Book $book){
+        
+        $publishers = Publisher::getAll();
+        $languages = Language::getAll();
+        $authors = Author::getAll();
+        $categories = Category::getAll();
+
+        return view("books.edit", [
+            "book" => $book,
+            "publishers" => $publishers, 
+            "languages" => $languages,
+            "authors" => $authors,
+            "categories" => $categories
+        ]);
+
     }
 
     /**
@@ -253,9 +277,94 @@ class BookController extends Controller{
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
-    {
-        //
+    public function update(Request $request, Book $book){
+        
+        //validar los datos
+        //Construir el validador
+        $validator = $this->buildValidator($request->all(), "edit");
+
+        //Invocar el validador y verificar si falló
+        if ($validator->fails()) {
+
+            //dd($validator->errors());
+            //https://laravel.com/docs/9.x/responses#redirecting-named-routes
+            return redirect()->route("books.edit", ["book" => $book->id])
+                        //https://laravel.com/docs/9.x/validation#manually-creating-validators
+                        ->withErrors($validator)
+                        //https://laravel.com/docs/9.x/responses#redirecting-with-input
+                        ->withInput();
+            
+        }
+
+
+        //Verificar si se mandó una nueva portada, borrar la anterior y guardar la nueva
+
+        $fileName = null;
+        $coverPath = null;
+
+        //Verificar si viene el archivo en la petición
+        //https://laravel.com/docs/9.x/requests#retrieving-uploaded-files
+        if($request->hasFile("cover")){
+
+            //Borrar el archivo (https://laravel.com/docs/9.x/filesystem#deleting-files) 
+            Storage::disk('public')->delete("books_covers/" . $book->cover);
+
+            //Crear uno nuevo
+            //Generar un nombre único del archivo
+            $fileName = $request->file("cover")->hashName();
+
+            //Guardar el archivo en el storage
+            $coverPath = $request->file("cover")->storeAs(
+                "books_covers", //Directorio
+                $fileName, //Nombre del archivo
+                "public" //Disco donde se guardará (configurado en clonfig/filesystems.php)
+            );
+
+        }
+
+        //Actualizar el libro usando el modelo
+        //https://laravel.com/docs/9.x/eloquent#updates
+        $book->isbn = $request->input("isbn");
+        $book->title = $request->input("title");
+        //Para este caso, que puede ser nulo, se pasa como valor default el que ya tenía el libro
+        $book->summary = $request->input("summary", $book->summary);
+        $book->year = $request->input("year");
+        $book->edition = $request->input("edition");
+        $book->price = $request->input("price");
+        //Se verificar si se guardó un nuevo archivo
+        $book->cover = $fileName ? $fileName : $book->cover;
+        $book->publisher_id = $request->input("publisher");
+        $book->language_id = $request->input("language");
+
+        //Actualizar los autores y categorías
+
+        //Borrar las asociaciones con autores
+        //https://laravel.com/docs/9.x/eloquent-relationships#attaching-detaching
+        $book->authors()->detach();
+
+        //Crear las asociaciones con los autores enviados
+        $book->authors()->attach($request->input("authors"));
+
+        //Borrar las asociaciones con categorías
+        //https://laravel.com/docs/9.x/eloquent-relationships#attaching-detaching
+        $book->categories()->detach();
+
+        //Crear las asociaciones con las categorías enviadas
+        $book->categories()->attach($request->input("category"));
+
+        //Guardar el libro
+        $book->save();
+
+        //Todo salió bien, redirigir al catálogo de libros
+        //https://laravel.com/docs/9.x/responses#redirecting-named-routes
+        return redirect()
+            ->route("books.show", ["book" => $book->id])
+            //https://laravel.com/docs/9.x/responses#redirecting-with-flashed-session-data
+            ->with("message", [
+                "type" => "success",
+                "text" => "El libro se actualizó exitosamente"
+            ]);
+    
     }
 
     /**

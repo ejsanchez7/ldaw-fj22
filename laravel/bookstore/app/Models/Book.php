@@ -86,4 +86,36 @@ class Book extends Model{
 
     }
 
+    //Devuelve un arreglo con los IDs de los autores del libro
+    public function authorsIds(){
+
+        //$this->authors devuelve una colección de objetos de la clase Author
+        //https://laravel.com/docs/9.x/collections
+        $ids = $this->authors->map(function($author){
+            //https://laravel.com/docs/9.x/collections#method-map
+            //Definir a qué se va a mapear el elemento
+            return $author->id;
+        });
+
+        //Extraer el arreglo de la colección
+        return $ids->all();
+
+    }
+
+    //Devuelve un arreglo con los IDs de las categorías del libro
+    public function categoriesIds(){
+
+        //$this->authors devuelve una colección de objetos de la clase Author
+        //https://laravel.com/docs/9.x/collections
+        $ids = $this->categories->map(function($cat){
+            //https://laravel.com/docs/9.x/collections#method-map
+            //Definir a qué se va a mapear el elemento
+            return $cat->id;
+        });
+
+        //Extraer el arreglo de la colección
+        return $ids->all();
+
+    }
+
 }
