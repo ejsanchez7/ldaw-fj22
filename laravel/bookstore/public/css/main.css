@@ -89,7 +89,8 @@ nav.navbar-light {
 nav.navbar-light ul.navbar-nav li a.nav-link:hover,
 nav.navbar-light ul.navbar-nav li a.nav-link.active,
 nav.navbar-light ul.dropdown-menu a.active,
-nav.navbar-light ul.dropdown-menu a:hover {
+nav.navbar-light ul.dropdown-menu a:hover,
+nav.navbar-light ul.dropdown-menu button.dropdown-item:hover {
     background-color: rgba(111,144,162, 0.2);
     color: var(--main-font-color);
 }
@@ -107,7 +108,8 @@ nav.navbar-light button.navbar-toggler,
 nav.navbar-light ul.navbar-nav li a.nav-link:hover,
 nav.navbar-light ul.navbar-nav li a.nav-link:focus,
 nav.navbar-light ul.navbar-nav li a.nav-link,
-nav.navbar-light ul.dropdown-menu a {
+nav.navbar-light ul.dropdown-menu a,
+nav.navbar-light ul.dropdown-menu button.dropdown-item {
     color: var(--main-font-color);
 }
 

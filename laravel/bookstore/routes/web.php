@@ -33,7 +33,7 @@ La ruta más básica de PHP recibe:
       en el navegador.
 La función controladora debe devolver una respuesta que se mandará en el navegador (típicamente HTML)
 */
-Route::get('/', function () {
+//Route::get('/', function () {
     /*
     "view" es un método predefinido (helper) de Laravel que devuelve el contenido de una vista que debe
     estar almacenada en el directorio "resources/views".
@@ -43,8 +43,12 @@ Route::get('/', function () {
     
     La extensión ".blade" se debe a que el "template engine" usado por laravel se llama "Blade".
     */
-    return view('welcome');
-});
+    //return view('welcome');
+//});
+
+// Ruta de reirección para que al entrar a "/" me mande a "/books"
+//https://laravel.com/docs/9.x/routing#redirect-routes
+Route::redirect('/', '/books');
 
 //Ruta para "about-us"
 // Route::get("/about-us", function(){

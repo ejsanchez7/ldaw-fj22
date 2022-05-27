@@ -82,7 +82,8 @@ return [
     |
     */
 
-    'locale' => 'en',
+    //https://laravel.com/docs/9.x/localization#configuring-the-locale
+    'locale' => env('APP_LANG','es'),
 
     /*
     |--------------------------------------------------------------------------
@@ -176,6 +177,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        //Service provider de fortify
+        //https://laravel.com/docs/9.x/providers
+        App\Providers\FortifyServiceProvider::class,
 
     ],
 
