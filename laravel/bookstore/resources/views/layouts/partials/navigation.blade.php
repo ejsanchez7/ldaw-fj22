@@ -106,7 +106,8 @@
             {{-- Valida que el el usuario no esté logueado --}}
             @guest
                 
-                <li class="nav-item position-absolute end-0">
+                <li class="nav-item position-absolute end-0 d-flex">
+                    <a class="nav-link py-3 px-4" href="{{ route('register') }}">Registrarse</a>
                     <a class="nav-link py-3 px-4" href="{{ route('login') }}">Login</a>
                 </li>
 

@@ -23,12 +23,24 @@ class UserSeeder extends Seeder
     public function run(){
         
         DB::table("users")->insert([
-            "id" => 1,
-            "name" => "Erik Sánchez",
-            "email" => "ejsanchez@tec.mx",
-            //El password debe estar hasheado para que funcione con el login
-            //https://laravel.com/docs/9.x/hashing#hashing-passwords
-            "password" => Hash::make("abc123")
+            [
+                "id" => 1,
+                "name" => "Erik Sánchez",
+                "email" => "ejsanchez@tec.mx",
+                //El password debe estar hasheado para que funcione con el login
+                //https://laravel.com/docs/9.x/hashing#hashing-passwords
+                "password" => Hash::make("abc123"),
+                "role_id" => 1
+            ],
+            [
+                "id" => 2,
+                "name" => "Usuario de Prueba",
+                "email" => "user@test.com",
+                //El password debe estar hasheado para que funcione con el login
+                //https://laravel.com/docs/9.x/hashing#hashing-passwords
+                "password" => Hash::make("abc123"),
+                "role_id" => 2
+            ],
         ]);
 
     }

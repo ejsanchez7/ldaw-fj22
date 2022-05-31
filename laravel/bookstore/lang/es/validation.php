@@ -12,7 +12,10 @@ return [
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
+    'confirmed' => 'La confirmación de ":attribute" no coincide',
+    'email' => '":attribute" debe ser un correo electrónico válido',
     'required' => 'El campo ":attribute" es requerido',
+    'unique' => '":attribute" ya existe en el sistema',
 
     /*
     |--------------------------------------------------------------------------

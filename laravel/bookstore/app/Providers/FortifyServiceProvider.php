@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 
+//Roles para pasar a la vista de registro
+use App\Models\Role;
+
+
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
@@ -50,6 +54,17 @@ class FortifyServiceProvider extends ServiceProvider
         //https://laravel.com/docs/9.x/fortify#authentication
         Fortify::loginView(function () {
             return view('auth.login');
+        });
+
+        //Indicar la vista que se utilizará para el registro de usuarios
+        //https://laravel.com/docs/9.x/fortify#registration
+        Fortify::registerView(function () {
+            
+            //Obtener los roles en caso de que se quiera dar la oportunidad de elegir el rol
+            $roles = Role::orderBy("name", "asc")->get();
+
+            return view('auth.register', ["roles" => $roles]);
+
         });
 
     }
