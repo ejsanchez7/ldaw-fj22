@@ -104,6 +104,10 @@ class BookController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create(){
+
+        if(!auth()->user()->hasPrivilege("crear_libros")){
+            return redirect("/");
+        }
         
         $publishers = Publisher::getAll();
         $languages = Language::getAll();
