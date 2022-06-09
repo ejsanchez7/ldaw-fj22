@@ -85,6 +85,10 @@ Route::get("/test", [TestController::class, "doSomething"]);
 //a ellas
 Route::get("authors", [AuthorController::class, "otherMethod"])->name("authors.other");
 
+// Las rutas con el prefijo "books" que no sean parte de la resource route (CRUD) se deben
+// definir antes de la resource route
+Route::get("books/buy/{book}", [BookController::class, "buy"])->name("books.buy");
+
 /*
 Cuando se crea un controller usando "artisan", la línea de comandos de laravel (php artisan 
 make:controller --resource AuthorController), se crea una clase controller prellenada

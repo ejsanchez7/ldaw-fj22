@@ -28,6 +28,7 @@ class PrivilegeSeeder extends Seeder
             ["id" => 6, "name" => "editar_autores"],
             ["id" => 7, "name" => "borrar_autores"],
             ["id" => 8, "name" => "ver_perfil"],
+            ["id" => 9, "name" => "comprar_libros"],
         ]);
 
         //Asociaciones priviliegios -> roles
@@ -41,8 +42,10 @@ class PrivilegeSeeder extends Seeder
             ["privilege_id" => 6, "role_id" => 1],
             ["privilege_id" => 7, "role_id" => 1],
             ["privilege_id" => 8, "role_id" => 1],
+            ["privilege_id" => 9, "role_id" => 1],
             //Rol user
             ["privilege_id" => 8, "role_id" => 2],
+            ["privilege_id" => 9, "role_id" => 2],
         ]);
 
     }

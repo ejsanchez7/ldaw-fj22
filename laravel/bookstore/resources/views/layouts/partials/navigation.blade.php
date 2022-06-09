@@ -24,40 +24,55 @@
                     Libros
                 </a>
 
-                <ul class="dropdown-menu m-0 border-0" aria-labelledby="booksDropdown">
-                    <li>
-                        <a class="dropdown-item text-center text-md-start" href="{{ route('books.create') }}">
-                            Nuevo
-                        </a>
-                    </li>
-                </ul>
+                {{-- 
+                @can se encarga de invocar el método de autorización correspondiente al primer 
+                parámetro en la policy asociada al modelo pasado como segundo parámetro
+
+                https://laravel.com/docs/9.x/authorization#via-blade-templates
+                --}}
+                @can('create', App\Models\Book::class)
+                    
+                    <ul class="dropdown-menu m-0 border-0" aria-labelledby="booksDropdown">
+                        <li>
+                            <a class="dropdown-item text-center text-md-start" href="{{ route('books.create') }}">
+                                Nuevo
+                            </a>
+                        </li>
+                    </ul>
+
+                @endcan
 
             </li>
-            <li class="nav-item dropdown">
-                <a 
-                    class="nav-link dropdown-toggle py-3 px-4" 
-                    href="#"
-                    id="authorsDropdown" 
-                    href="#" 
-                    role="button"
-                    data-bs-toggle="dropdown" 
-                    aria-expanded="false"
-                >
-                    Autores
-                </a>
 
-                <ul class="dropdown-menu m-0 border-0" aria-labelledby="authorsDropdown">
-                    <li>
-                        <a class="dropdown-item text-center text-md-start" href="{{ route('authors.index') }}">
-                            Listado
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item text-center text-md-start" href="{{ route('authors.create') }}">Nuevo</a>
-                    </li>
-                </ul>
+            @can("view", App\Models\Author::class)
 
-            </li>
+                <li class="nav-item dropdown">
+                    <a 
+                        class="nav-link dropdown-toggle py-3 px-4" 
+                        href="#"
+                        id="authorsDropdown" 
+                        href="#" 
+                        role="button"
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false"
+                    >
+                        Autores
+                    </a>
+
+                    <ul class="dropdown-menu m-0 border-0" aria-labelledby="authorsDropdown">
+                        <li>
+                            <a class="dropdown-item text-center text-md-start" href="{{ route('authors.index') }}">
+                                Listado
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-center text-md-start" href="{{ route('authors.create') }}">Nuevo</a>
+                        </li>
+                    </ul>
+
+                </li>
+
+            @endcan
 
             {{-- 
             Directivas de autenticación para saber si el usuario está o no logueado 

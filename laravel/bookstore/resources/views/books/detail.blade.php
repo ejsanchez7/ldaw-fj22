@@ -40,12 +40,26 @@
                 ${{ $book->price }}
             </h3>
 
-            <a
-                href="{{ route('books.edit', ['book' => $book->id]) }}"
-                class="btn btn-warning mt-3"
-            >
-                Editar
-            </a>
+            @can("update", $book)
+
+                <a
+                    href="{{ route('books.edit', ['book' => $book->id]) }}"
+                    class="btn btn-warning mt-3"
+                >
+                    Editar
+                </a>
+
+            @endcan
+
+            @can("buy", App\Models\Book::class)
+                <a
+                    href="{{ route('books.buy', ['book' => $book->id]) }}"
+                    class="btn btn-success mt-3 ms-3"
+                >
+                    Comprar
+                </a>
+
+            @endcan
 
         </div>
 

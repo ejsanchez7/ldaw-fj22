@@ -58,21 +58,25 @@
                         Detalle
                     </a>
 
-                    <form 
-                        action="{{ route("books.destroy", ["book" => $book->id]) }}" 
-                        method="POST" 
-                        class="ms-3" 
-                    >
+                    @can("delete", $book)
 
-                        @csrf
-                        @method("DELETE")
-                        {{-- <input type="hidden" value="DELETE" name="_method" /> --}}
+                        <form 
+                            action="{{ route("books.destroy", ["book" => $book->id]) }}" 
+                            method="POST" 
+                            class="ms-3" 
+                        >
 
-                        <button type="submit" class="btn btn-danger">
-                            Eliminar
-                        </button>
-                    
-                    </form>
+                            @csrf
+                            @method("DELETE")
+                            {{-- <input type="hidden" value="DELETE" name="_method" /> --}}
+
+                            <button type="submit" class="btn btn-danger">
+                                Eliminar
+                            </button>
+                        
+                        </form>
+
+                    @endcan
 
                 </div>
 

@@ -21,6 +21,20 @@ use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller{
 
+    //Constructor para asociar funcionalidad de inicio
+    public function __construct() {
+
+        // Asociar la policy de autorización al controller
+        // https://laravel.com/docs/9.x/authorization#authorizing-resource-controllers
+        /*
+        Recibe como parámetros:
+            + La clase del modelo a la cual está asociada la policy
+            + El nombre del parámetro que representa al ID del modelo cuando se pasa en la URL 
+        */
+        $this->authorizeResource(Book::class, 'book');
+        
+    }
+
     //Genera una instancia del validador para crear/actualizar libros
     private function buildValidator($data, $action = "create"){
 
@@ -104,10 +118,6 @@ class BookController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create(){
-
-        if(!auth()->user()->hasPrivilege("crear_libros")){
-            return redirect("/");
-        }
         
         $publishers = Publisher::getAll();
         $languages = Language::getAll();
@@ -395,4 +405,16 @@ class BookController extends Controller{
                 ]);
 
     }
+
+    // Métod dummy para simular la compra
+    public function buy(Book $book){
+
+        //Autorización manual usando policies
+        //https://laravel.com/docs/9.x/authorization#via-controller-helpers
+        $this->authorize("buy", Book::class);
+
+        return view("books.buy", ["book" => $book]);
+
+    }
+
 }
